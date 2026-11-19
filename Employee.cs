@@ -9,6 +9,14 @@
                 throw new ArgumentOutOfRangeException(paramName, "Value cannot be negative.");
             }
         }
+
+        public static void ThrowIfNullOrWhiteSpace(string value, string paramName)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException(paramName, "Value Can Not Be Empty Or Whitespace.");
+            }
+        }
     }
 
     internal abstract class Employee
@@ -24,10 +32,7 @@
             get => name;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException("Name cannot be null or empty.", nameof(Name));
-                }
+                Validators.ThrowIfNullOrWhiteSpace(value, nameof(Name));
                 name = value;
             }
         }
@@ -90,6 +95,11 @@
 
     class Technician : Employee
     {
+        public Technician(string name, decimal baseSalary, int overtimeHours, int overtimeMinutes, decimal overtimeHourlyRate)
+            : base(name, baseSalary, overtimeHours, overtimeMinutes, overtimeHourlyRate)
+        {
+        }
+
         public override decimal CalculateSalary()
         {
             int totalMinutes = (OvertimeHours * 60) + OvertimeMinutes;
